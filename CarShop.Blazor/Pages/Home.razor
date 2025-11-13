@@ -1,0 +1,45 @@
+﻿@page "/"
+@inject HttpClient Http
+
+<PageTitle>Home</PageTitle>
+
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+
+@* @if (cars is null)
+{
+    <p>Laddar...</p>
+}
+else
+{ *@
+    @* <ul>
+        @foreach (var car in cars)
+        {
+            <li>@car.Model (@car.Year) - @car.Price kr</li>
+        }
+    </ul> *@
+
+@if(error is not null){
+    <p>@error</p>
+}
+else{
+    <p>@cars</p>
+}
+@* } *@
+
+@code {
+    string? cars;
+    string? error; 
+    @* List<Car>? cars; *@
+    
+    protected override async Task OnInitializedAsync()    
+    {
+        try{
+            cars = await Http.GetStringAsync("http://localhost:5100/api/cars");
+            @* cars = await Http.GetFromJsonAsync<List<Car>>("https://localhost:5100/cars"); *@
+        }catch(Exception e){
+            error = e.Message;
+        }
+    }
+}
